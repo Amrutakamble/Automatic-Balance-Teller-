@@ -1,0 +1,191 @@
+START:  MOV AX,@DATA
+        MOV DS,AX
+
+        MOV DX, OFFSET MSG5
+        MOV AH, 09H
+        INT 21H
+        
+        LEA DX,U1 
+        MOV AH,0AH
+        INT 21H
+               
+
+US1:  MOV SI, OFFSET P11
+        MOV DI, OFFSET CARDHOLDERNAME1
+        MOV CX,9
+       
+CHECK_U1:        MOV AL,[SI]
+        CMP [DI],AL
+        JNE U2
+        INC SI
+        INC DI
+        LOOP CHECK_U1
+        JMP PASS1  
+        
+U2:     MOV SI, OFFSET P11
+        MOV DI, OFFSET CARDHOLDERNAME2
+        MOV CX,10
+
+CHECK_U2:  MOV AL,[SI]
+        CMP [DI],AL
+        JNE U3
+        INC SI
+        INC DI
+        LOOP CHECK_U2
+        JMP PASS2
+        
+U3:     MOV SI, OFFSET P11
+        MOV DI, OFFSET CARDHOLDERNAME3
+        MOV CX, 9
+
+CHECK_U3: MOV AL,[SI]
+        CMP [DI],AL
+        JNE U4
+        INC SI
+        INC DI
+        LOOP CHECK_U3
+        JMP PASS3
+        
+U4:     MOV SI, OFFSET P11
+        MOV DI, OFFSET CARDHOLDERNAME4
+        MOV CX, 10  
+
+CHECK_U4: MOV AL,[SI]
+        CMP [DI],AL
+        JNE WRONG_U
+        INC SI
+        INC DI
+        LOOP CHECK_U4
+        JMP PASS4 
+        
+PASS1:   MOV DX, OFFSET MSG1
+        MOV AH, 09H
+        INT 21H
+        
+        LEA DX,P1 
+        MOV AH,0AH
+        INT 21H
+
+        CMP L1,4
+        JNE WRONG
+
+        LEA SI,PIN1
+        LEA DI,P11
+
+        MOV CX,4
+
+CHECK1:  MOV AL,[SI]
+        CMP [DI],AL
+        JNE WRONG
+        INC SI
+        INC DI
+        LOOP CHECK1     
+        
+        MOV DX, OFFSET MSG3
+        MOV AH, 09H
+        INT 21H
+        JMP EXIT
+        
+PASS2:   MOV DX, OFFSET MSG1
+        MOV AH, 09H
+        INT 21H
+        
+        LEA DX,P1 
+        MOV AH,0AH
+        INT 21H
+
+        CMP L1,4
+        JNE WRONG
+
+        LEA SI,PIN2
+        LEA DI,P11
+
+        MOV CX,4
+
+CHECK2:  MOV AL,[SI]
+        CMP [DI],AL        
+        JNE WRONG
+        INC SI
+        INC DI
+        LOOP CHECK2  
+        
+        MOV DX, OFFSET MSG6
+        MOV AH, 09H
+        INT 21H
+        JMP EXIT
+        
+PASS3:   MOV DX, OFFSET MSG1
+        MOV AH, 09H
+        INT 21H
+        
+        LEA DX,P1 
+        MOV AH,0AH
+        INT 21H
+
+        CMP L1,4
+        JNE WRONG
+
+        LEA SI,PIN3
+        LEA DI,P11
+
+        MOV CX,4
+
+CHECK3:  MOV AL,[SI]
+        CMP [DI],AL
+        JNE WRONG
+        INC SI
+        INC DI
+        LOOP CHECK3        
+
+        MOV DX, OFFSET MSG7
+        MOV AH, 09H
+        INT 21H
+        JMP EXIT
+        
+PASS4:   MOV DX, OFFSET MSG1
+        MOV AH, 09H
+        INT 21H
+        
+        LEA DX,P1 
+        MOV AH,0AH
+        INT 21H
+
+        CMP L1,4
+        JNE WRONG
+
+        LEA SI,PIN4
+        LEA DI,P11
+
+        MOV CX,4
+
+CHECK4:  MOV AL,[SI]
+        CMP [DI],AL
+        JNE WRONG
+        INC SI
+        INC DI
+        LOOP CHECK4 
+        
+        MOV DX, OFFSET MSG8
+        MOV AH, 09H
+        INT 21H
+        JMP EXIT
+LABEL:  MOV DX, OFFSET MSG9 
+        MOV AH,09H
+        INT 21H
+        
+WRONG:  MOV DX, OFFSET MSG2
+        MOV AH, 09H
+        INT 21H 
+        
+        JMP START
+        
+WRONG_U:  MOV DX, OFFSET MSG4
+        MOV AH, 09H
+        INT 21H
+        
+        JMP START        
+
+EXIT:   MOV AH,4CH
+        INT 21H
+CODE ENDS
+END START
